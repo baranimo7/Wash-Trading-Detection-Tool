@@ -1,0 +1,256 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% load crispy_forms_tags %}
+{% block body %}
+<div id="main">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+        function MyFunction(sel) {
+            var item_id = sel.options[sel.selectedIndex].text;
+            var collection_id = document.getElementById('id_collection').value
+
+            $.ajax({
+                type: 'GET',
+                url: "{% url 'get-image-as-json' %}",
+                data: {
+                    'token_id' : item_id, 'collection_id' : collection_id
+                },
+                beforeSend: function(){
+                    $("#pageLoader_text").text("Preparing the graphs")
+                    $("#pageloader").fadeIn();
+                },
+                success: function(data){
+                    $("#pageloader").hide()
+                    const myNode = document.getElementById("carousel_slider");
+                    while (myNode.lastElementChild) {
+                        myNode.removeChild(myNode.lastElementChild);
+                    }
+                    for (let i = 0; i < data['filename'].length; i++) {
+                        var element = document.createElement('div')
+                        if (i === 0) {
+                            $(element).addClass('carousel-item active')
+                        }
+                        else {
+                            $(element).addClass('carousel-item')
+                        }
+                        var image = document.createElement('img')
+                        image.src = "{% static 'images/'%}" + data['filename'][i]
+                        element.appendChild(image)
+                        $( "#carousel_slider" ).append(element)
+                    }
+                },
+                error: function(data){
+                    $("#pageloader").hide()
+                    $('#Modal').modal('show');
+                    document.getElementById('ModalLabel').style ="color:red"
+                    document.getElementById('ModalLabel').innerHTML = "Error"
+                    document.getElementById('ModalError').style ="color:red"
+                    document.getElementById('ModalError').innerHTML = "You have received an error about the information provided or because of an error on the server. Check the information. {collections or token_id}"
+                }
+            })
+        }
+        function form_submit(sel)
+        {
+            var collection_id = sel.options[sel.selectedIndex].text;
+            document.getElementById("id_collection").value=collection_id
+            $("#searchForm").submit();
+
+        }
+        $(window).on('load', function() {
+            setTimeout(function(){
+              $('#opening').hide();
+            }, 1000);
+        });
+        $(document).ready(function(){
+          $("#searchForm").on("submit", function(){
+            $("#pageLoader_text").text("Preparing the results")
+            $("#pageloader").fadeIn();
+          });//submit
+        });//document ready
+    </script>
+    <style>
+        #id_collections option:first-child{
+            display:none;
+        }
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+          height: 50px;
+          width: 50px;
+          outline: black;
+          background-size: 100%, 100%;
+          border-radius: 50%;
+          border: 5px solid black;
+          background-image: none;
+        }
+        .carousel-control-next-icon:after
+        {
+          content: '>';
+          font-size: 25px;
+          color: black;
+        }
+
+        .carousel-control-prev-icon:after {
+          content: '<';
+          font-size: 25px;
+          color: black;
+        }
+        #opening {
+          position: fixed;
+          display: block;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          text-align: center;
+          opacity: 0.7;
+          background-color: #fff;
+          z-index: 99;
+        }
+
+        #opening-image {
+          position: absolute;
+          top: 40%;
+          left: 35%;
+          margin: -25px 0 0 -25px;
+          z-index: 100;
+        }
+        #pageloader
+        {
+          background: rgba( 255, 255, 255, 0.8 );
+          display: none;
+          height: 100%;
+          position: fixed;
+          width: 100%;
+          z-index: 9999;
+        }
+
+        #pageloader img
+        {
+          left: 45%;
+          margin-left: -32px;
+          margin-top: -32px;
+          position: absolute;
+          top: 50%;
+        }
+
+
+    </style>
+
+    <div id="pageloader">
+        <h3 style="text-align:center; position: absolute; top: 35%; left: 40%;" id="pageLoader_text"></h3>
+       <img src="http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/images/loader-large.gif" alt="processing..." />
+    </div>
+
+    <div class="jumbotron text-center">
+            <div style="margin-top:2%; margin-bottom: 2%;" class = "container">
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if message.tags == "warning" %}
+                            <div class="alert alert-{{message.tags}}" >{{ message }}</div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <br>
+            <h1>Wash Trading Analysis</h1>
+            <br>
+            <form action="" method="post" id="searchForm">
+                {% csrf_token %}
+                <div class="form-group col-6" style="float:left">
+                    <label for="id_collection">{{ form.collection.label }}</label>
+                    <input name="collection" type="text" class="form-control" id="id_collection" value="{% if collection_id %} {{collection_id}} {% endif %}">
+                </div>
+                <div class="form-group col-6" style="float:left">
+                    <label for="id_collections">Existing Collections in DataBase</label>
+                    <select name="collections" class="form-control" id="id_collections" onchange="form_submit(this)">
+                        {% for collection in form.collections %}
+                            {{collection}}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div style="clear:both"></div>
+                <input type="submit" class="btn btn-primary" value="Submit" data-command="reset">
+            </form>
+    </div>
+    <div class="jumbotron text-center">
+        <div class="text-center col-6" style="float:left">
+            <br>
+            <h2> Results  </h2>
+            <div style="margin-top:2%; margin-bottom: 2%;" class = "container">
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if message.tags == "info" %}
+                            <div class="alert alert-success" style="color:black" >{{ message }}</div>
+                        {% else %}
+                            <div class="alert alert-{{message.tags}}" >{{ message }}</div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="text-center col-6" style="float:left">
+            <br>
+            <h2>Token List</h2>
+            {% if dictionary %}
+            <div style="margin-top:2%; margin-bottom: 2%;" class = "container">
+                <select name="collections" class="form-control" id="id_items" onchange="MyFunction(this)">
+                    <option hidden></option>
+                    {% for item in dictionary %}
+                        <option class="list-group-item" >{{item}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% else %}
+                <div style="margin-top:2%; margin-bottom: 2%;" class = "container">
+                    {% if messages %}
+                        {% for message in messages %}
+                            {% if message.tags == "warning" %}
+                                <div class="alert alert-{{message.tags}}" >{{ message }}</div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+        <div style="clear:both"></div>
+    </div>
+    <div class="jumbotron text-center">
+        <div class="text-center">
+            <br>
+            <h2> Transaction History & Trade Graph </h2>
+        </div>
+
+        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner" id="carousel_slider">
+
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabel">Please wait</h5>
+                </div>
+                <div class="modal-body">
+                    <img id="ModalImage" src=""/>
+                    <h3 id='ModalError'></h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock body %}

@@ -1,0 +1,9 @@
+Django==4.0.1
+django-crispy-forms
+psycopg2
+networkx
+matplotlib
+requests
+pymongo
+dnspython
+django-searchable-select
