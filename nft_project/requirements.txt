@@ -1,6 +1,6 @@
 Django==4.0.1
 django-crispy-forms
-psycopg2
+psycopg2-binary
 networkx
 matplotlib
 requests
