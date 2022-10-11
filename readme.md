@@ -1,23 +1,30 @@
-`This project is part of the paper: "Towards an Online Service to Detect NFT Wash Trading Activities on the Ethereum Blockchain" and in this project a web application to the detect wash trading activities in the given NFT collection is presented.`
+# Wash Trading Detection Tool
 
-`Requirements to run the project:`
-`1) You should get an API key from Moralis and put in the __init__ method in the services.py`
-`2) You should create a mongoDb collection and cruster as described in __init__ method in the services.py and put the link in the method`
+### This project is part of the paper:  
+
+"Towards an Online Service to Detect NFT Wash Trading Activities on the Ethereum Blockchain"  
+written by Baran Kalkavan.  
 
 
-`Steps to run the project:`
-`To run the project you have to follow the following steps:`
+## Web application to detect wash trading activities in a given NFT collection
 
-`pip install virtualenv`
+### Requirements to run the project:
+1) Get an API key from Moralis and enter it into the `__init__` method inside `collection/services.py`
+2) Create a MongoDb collection and cluster as described in `__init__` and enter the link into the method
 
-`virtualenv nftprojectenv`
+### Steps to run the project:
 
-`source nftprojectenv/bin/activate`
+```
+pip install virtualenv
 
-`cd nft_project`
+virtualenv nftprojectenv
 
-`pip install -r requirements.txt`
+source nftprojectenv/bin/activate
 
-`python manage.py runserver`
+cd nft_project
 
+pip install -r requirements.txt
+
+python manage.py runserver
+```
 
