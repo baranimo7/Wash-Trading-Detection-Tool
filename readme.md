@@ -9,22 +9,30 @@ written by Baran Kalkavan.
 ## Web application to detect wash trading activities in a given NFT collection
 
 ### Requirements to run the project:
-1) Get an API key from Moralis and enter it into the `__init__` method inside `collection/services.py`
-2) Create a MongoDb collection and cluster as described in `__init__` and enter the link into the method
+1) Get an API key from Moralis
+2) Create a MongoDb collection and cluster
 
 ### Steps to run the project:
 
-```
-pip install virtualenv
+1) Enter your key and cluster into `nft_project/config.py`
 
-virtualenv nftprojectenv
+```py
+# API-Key
+cnf_api = "your-api-key"
 
-source nftprojectenv/bin/activate
-
-cd nft_project
-
-pip install -r requirements.txt
-
-python manage.py runserver
+# MongoDB Cluster
+cnf_cls = "your-cluster"
 ```
 
+2) Run the following command inside the main directory
+
+```
+bash start.sh
+```
+
+3) Enter the link in the terminal into your browser
+
+```
+...
+Starting development server at http://127.0.0.1:8000/
+```
