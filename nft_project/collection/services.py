@@ -22,17 +22,17 @@ from django.conf import settings as django_settings
 import os
 from datetime import date, datetime
 
+from config import cnf_api, cnf_cls
 
 class MongoMService:
     def __init__(self):
         self.pp = pprint.PrettyPrinter(indent=4)
-        #put your mongoDB link here
-        self.cluster = pymongo.MongoClient("", tlsCAFile=certifi.where())
+        self.cluster = pymongo.MongoClient(cnf_cls, tlsCAFile=certifi.where())
         self.db = self.cluster['test']
         self.collection = self.db['test']
 
-        self.headers1 = {  # you can use your own Moralis API Key
-            'x-api-key': ''
+        self.headers1 = {
+            'x-api-key': cnf_api
         }
         self.messages = list()
 
