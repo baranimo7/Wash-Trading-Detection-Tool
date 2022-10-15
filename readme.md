@@ -1,10 +1,13 @@
-This project is part of the paper: `Towards an Online Service to Detect NFT Wash Trading Activities on the Ethereum Blockchain`, and in this project a web application to the detect wash trading activities in the given NFT collection is presented.
+<!-- An Online Web Service to Detect Wash Trading  -->
+## An Online Web Service to Detect Wash Trading 
 
-**Requirements to run the project**
+This project is part of the paper: `Towards an Online Service to Detect NFT Wash Trading Activities on the Ethereum Blockchain`, and in this project a web application to the detect wash trading activities in the given NFT collection is presented. 
+
+**Requirements:**
 1. You should get an API key from Moralis and put in the `__init__` method in the services.py
 2. You should create a mongoDb collection and cruster as described in `__init__` method in the services.py and put the link in the method
 
-**To run the project you have to follow the following steps:**
+**Running the project:**
 ```
 pip install virtualenv
 
@@ -18,4 +21,10 @@ pip install -r requirements.txt
 
 python manage.py runserver
 ```
+
+**After you run the project:**
+-You can enter the NFT contract_address of any collection on the Ethereum blockchain and get the analysis results. (this process can take more than an hour depending on the size of the collection)
+-Alternativly you can choose from the existing collections in our database from the dropdown and get the results immediatly
+-When the results are ready, you can choose from the tokens to get
+
 
