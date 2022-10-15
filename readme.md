@@ -28,7 +28,7 @@ python manage.py runserver
 
 -Alternatively, you can choose from the existing collections in our database from the dropdown and get the results immediately.
 
--When the results are ready, you can choose from the tokens to get.
+-When the results are ready, you can choose from the tokens to get their Trade- and transaction history graphs.
 
 
 
