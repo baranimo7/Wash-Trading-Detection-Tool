@@ -7,17 +7,17 @@
 
 `Steps to run the project:`
 `To run the project you have to follow the following steps:`
+```
+pip install virtualenv
 
-`pip install virtualenv`
+virtualenv nftprojectenv
 
-`virtualenv nftprojectenv`
+source nftprojectenv/bin/activate
 
-`source nftprojectenv/bin/activate`
+cd nft_project
 
-`cd nft_project`
+pip install -r requirements.txt
 
-`pip install -r requirements.txt`
-
-`python manage.py runserver`
-
+python manage.py runserver
+```
 
